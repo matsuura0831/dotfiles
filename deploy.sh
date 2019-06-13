@@ -56,7 +56,7 @@ if [ $LINE -eq 0 ]; then
   echo "export PATH=\$GOPATH/bin:\$PATH" >> $RC
 fi
 
-if ["$GOPATH" == ""]; then
+if [ "$GOPATH" == "" ]; then
   . $RC
 fi
 
