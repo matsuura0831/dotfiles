@@ -9,6 +9,15 @@ DIR_BACKUP=backup
 RC=~/.zshrc.local
 touch $RC
 
+append_rc() {
+  LINE=$(grep "$1" $RC | wc -l)
+  if [ $LINE -eq 0 ]; then
+    echo $1 >> $RC
+  fi
+}
+
+append_rc 'export PATH=${HOME}/bin:${PATH}'
+
 echo "Install conf.d ------------------------------------------"
 mkdir -p ${DIR_BACKUP}
 
@@ -32,11 +41,8 @@ sudo add-apt-repository -y ppa:longsleep/golang-backports
 sudo apt-get update
 sudo apt-get install -y golang-go
 
-LINE=$(grep \$GOPATH $RC | wc -l)
-if [ $LINE -eq 0 ]; then
-  echo "export GOPATH=\$HOME/go" >> $RC
-  echo "export PATH=\$GOPATH/bin:\$PATH" >> $RC
-fi
+append_rc 'export GOPATH=${HOME}/go'
+append_rc 'export PATH=${GOPATH}/bin:${PATH}'
 
 if [ "$GOPATH" == "" ]; then
   . $RC
@@ -46,8 +52,5 @@ go get github.com/peco/peco/cmd/peco
 go get github.com/motemen/ghq
 git config --global ghq.root ~/ghq
 
-LINE=$(grep "alias g=" $RC | wc -l)
-if [ $LINE -eq 0 ]; then
-  echo "alias g='cd \$(ghq root)/\$(ghq list | peco)'" >> $RC
-fi
+append_rc 'alias g="cd \$(ghq root)/\$(ghq list | peco)"'
 
