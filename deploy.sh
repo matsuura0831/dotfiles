@@ -46,7 +46,7 @@ sudo apt-get install -y vim-gnome xsel tmux
 curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
 
 echo "Install ghq ---------------------------------------------"
-sudo add-apt-repository ppa:longsleep/golang-backports
+sudo add-apt-repository -y ppa:longsleep/golang-backports
 sudo apt-get update
 sudo apt-get install -y golang-go
 
@@ -60,6 +60,12 @@ if [ "$GOPATH" == "" ]; then
   . $RC
 fi
 
+go get github.com/peco/peco/cmd/peco
 go get github.com/motemen/ghq
 git config --global ghq.root ~/ghq
+
+LINE=$(grep "alias g=" $RC | wc -l)
+if [ $LINE -eq 0 ]; then
+  echo "alias g='cd \$(ghq root)/\$(ghq list | peco)'" >> $RC
+fi
 
