@@ -17,6 +17,8 @@ for SRC_PATH in $(find ${DIR_CONFIG} -type f); do
   if [ -e ${DST_PTH} ]; then
     mv ${DST_PATH} ${DIR_BACKUP}/
   fi
+
+  mkdir -p $(dirname $DST_PATH)
   ln -s ${SRC_PATH} ${DST_PATH}
 done
 
