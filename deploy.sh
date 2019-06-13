@@ -1,33 +1,21 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]; then
-  PATH_CONFIG=./conf
-else
-  PATH_CONFIG=$1
-fi
+CRNT_DIR=$(cd $(dirname $0); pwd)
+PATH_CONFIG=${CRNT_DIR}/conf.d
 
 DIR_CONFIG=$(cd $PATH_CONFIG && pwd)
 DIR_BACKUP=backup
-FILE_TSV=map.tsv
 
-declare -A MAP
+RC=~/.zshrc.local
 
 IFS=$'\n'
 
+echo "Install conf.d ------------------------------------------"
+declare -A MAP
 for i in $(ls -a ${DIR_CONFIG} | grep -v "^\.*$"); do
   MAP["$i"]=$HOME/$i
   echo $HOME/$i
 done
-
-if [ -f ${FILE_TSV} ]; then
-  for i in $(cat ${FILE_TSV}); do
-    KEY=$(echo $i | cut -f 1)
-    VAL=$(echo $i | cut -f 2)
-    if [ "" != "$KEY" -a "" != "$VAL" ]; then
-      MAP["$KEY"]=$(echo $VAL)
-    fi
-  done
-fi
 
 mkdir -p ${DIR_BACKUP}
 
@@ -53,5 +41,25 @@ for i in ${!MAP[@]}; do
   ln -s ${SRC_PATH} ${DST_PATH}
 done
 
+echo "Install applications -------------------------------------"
 sudo apt-get install -y vim-gnome xsel tmux
 curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
+
+echo "Install ghq ---------------------------------------------"
+sudo add-apt-repository ppa:longsleep/golang-backports
+sudo apt-get update
+sudo apt-get install -y golang-go
+
+LINE=$(grep \$GOPATH $RC | wc -l)
+if [ $LINE -eq 0 ]; then
+  echo "export GOPATH=\$HOME/go" >> $RC
+  echo "export PATH=\$GOPATH/bin:\$PATH" >> $RC
+fi
+
+if ["$GOPATH" == ""]; then
+  . $RC
+fi
+
+go get github.com/motemen/ghq
+git config --global ghq.root ~/ghq
+
