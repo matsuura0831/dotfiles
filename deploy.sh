@@ -1,6 +1,12 @@
 #!/bin/bash
 
-DIR_CONFIG=$(cd conf && pwd)
+if [ $# -ne 1 ]; then
+  PATH_CONFIG=./conf
+else
+  PATH_CONFIG=$1
+fi
+
+DIR_CONFIG=$(cd $PATH_CONFIG && pwd)
 DIR_BACKUP=backup
 FILE_TSV=map.tsv
 
