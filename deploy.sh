@@ -8,8 +8,9 @@ declare -A MAP
 
 IFS=$'\n'
 
-for i in $(ls ${DIR_CONFIG}); do
-  MAP["$i"]=$HOME/.$i
+for i in $(ls -a ${DIR_CONFIG} | grep -v "^\.*$"); do
+  MAP["$i"]=$HOME/$i
+  echo $HOME/$i
 done
 
 if [ -f ${FILE_TSV} ]; then
@@ -25,7 +26,7 @@ fi
 mkdir -p ${DIR_BACKUP}
 
 for i in ${!MAP[@]}; do
-echo "${i}"
+  echo "${i}"
   S=${DIR_CONFIG}/${i}
   SRC_DIR=$(cd $(dirname $S) && pwd)
   SRC_FILE=$(basename $S)
