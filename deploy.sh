@@ -8,36 +8,15 @@ DIR_BACKUP=backup
 
 RC=~/.zshrc.local
 
-IFS=$'\n'
-
 echo "Install conf.d ------------------------------------------"
-declare -A MAP
-for i in $(ls -a ${DIR_CONFIG} | grep -v "^\.*$"); do
-  MAP["$i"]=$HOME/$i
-  echo $HOME/$i
-done
-
 mkdir -p ${DIR_BACKUP}
 
-for i in ${!MAP[@]}; do
-  echo "${i}"
-  S=${DIR_CONFIG}/${i}
-  SRC_DIR=$(cd $(dirname $S) && pwd)
-  SRC_FILE=$(basename $S)
-  SRC_PATH=${SRC_DIR}/${SRC_FILE}
+for SRC_PATH in $(find ${DIR_CONFIG} -type f); do
+  DST_PATH=$HOME${SRC_PATH#${DIR_CONFIG}}
 
-  D=${MAP[$i]}
-  DST_DIR=$(cd $(dirname $D) && pwd)
-  DST_FILE=$(basename $D)
-  DST_PATH=${DST_DIR}/${DST_FILE}
-
-  echo "  deply: ${DST_PATH} -> ${DST_PATH}"
-
-  if [ -f ${DST_PATH} ]; then
-    mv ${DST_PATH} ${DIR_BACKUP}/${DST_FILE}
+  if [ -e ${DST_PTH} ]; then
+    mv ${DST_PATH} ${DIR_BACKUP}/
   fi
-  rm -f ${DST_PATH}
-
   ln -s ${SRC_PATH} ${DST_PATH}
 done
 
