@@ -7,6 +7,7 @@ DIR_CONFIG=$(cd $PATH_CONFIG && pwd)
 DIR_BACKUP=backup
 
 RC=~/.zshrc.local
+touch $RC
 
 echo "Install conf.d ------------------------------------------"
 mkdir -p ${DIR_BACKUP}
