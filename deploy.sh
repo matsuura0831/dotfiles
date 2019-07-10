@@ -41,12 +41,14 @@ sudo add-apt-repository -y ppa:longsleep/golang-backports
 sudo apt-get update
 sudo apt-get install -y golang-go
 
-append_rc 'export GOPATH=${HOME}/go'
+append_rc 'export GOPATH=${HOME}/bin/go'
 append_rc 'export PATH=${GOPATH}/bin:${PATH}'
 
 if [ "$GOPATH" == "" ]; then
   . $RC
 fi
+
+mkdir -p ${GOPATH}
 
 go get github.com/peco/peco/cmd/peco
 go get github.com/motemen/ghq
