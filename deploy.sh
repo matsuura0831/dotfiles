@@ -33,7 +33,7 @@ for SRC_PATH in $(find ${DIR_CONFIG} -type f); do
 done
 
 echo "Install applications -------------------------------------"
-sudo apt-get install -y vim-gnome xsel tmux
+sudo apt-get install -y vim xsel tmux
 curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
 
 echo "Install ghq ---------------------------------------------"
@@ -51,7 +51,7 @@ fi
 mkdir -p ${GOPATH}
 
 go get github.com/peco/peco/cmd/peco
-go get github.com/motemen/ghq
+go get github.com/x-motemen/ghq
 git config --global ghq.root ~/ghq
 
 append_rc 'alias g="cd \$(ghq root)/\$(ghq list | peco)"'
